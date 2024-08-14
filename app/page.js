@@ -6,6 +6,7 @@ import { Box, Button, Grid } from "@mui/material";
 import App from "next/app";
 import Head from "next/head";
 import { AppBar, Container, Toolbar, Typography } from "@mui/material";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -21,8 +22,16 @@ export default function Home() {
             Flashcard SaaS
           </Typography>
           <SignedOut>
-            <Button color="inherit">Login</Button>
-            <Button color="inherit">Sign Up</Button>
+            <Button color="inherit">
+              <Link href="/signin" passHref>
+                Login
+              </Link>
+            </Button>
+            <Button color="inherit">
+              <Link href="/signup" passHref>
+                Sign Up
+              </Link>
+            </Button>
           </SignedOut>
           <SignedIn>
             <UserButton />
