@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 export default function Generate() {
   const [topic, setTopic] = useState('');
-  const [flashcards, setFlashcards] = useState([]);  // Initialize as an empty array
+  const [flashcards, setFlashcards] = useState([]); 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -22,13 +22,13 @@ export default function Generate() {
       });
 
       const data = await response.json();
-      console.log('API Response:', data);  // Log the entire API response
+      console.log('API Response:', data); 
 
       if (response.ok) {
         const message = data.choices[0]?.message?.content;
         console.log('Message Content:', message);
 
-        // Extract the JSON part of the message content
+        
         const jsonStartIndex = message.indexOf('{');
         const jsonEndIndex = message.lastIndexOf('}') + 1;
 
