@@ -1,10 +1,13 @@
 'use client'
 
-import Header from '@/app/Components/Header'
+import Header from '@/app/Components/Header';
 import Link from 'next/link';
 import FeatureCard from '@/app/Components/FeatureCard';
 import { faKeyboard, faGlobe, faBrain } from '@fortawesome/free-solid-svg-icons';
 import PricingPlan from '@/app/Components/PricingPlan';
+import Image from 'next/image';
+
+
 
 
 
@@ -169,7 +172,7 @@ export default function Home() {
           <Link className='border-2 border-solid border-darkgreen px-20 py-4 rounded bg-darkgreen text-white ml-5' href='/signup'>Get Started!</Link>
         </article>
         <article>
-          <img className="w-full" src='/hero.svg' alt='a woman holding a pc and smiling' />
+          <Image  width={500} height={500} className="w-full" src='/hero.svg' alt='a woman holding a pc and smiling' />
         </article>
       </section>
       <section id="new-features" className="py-8 bg-white sm:py-10 lg:py-16">
@@ -213,7 +216,7 @@ export default function Home() {
             Choose Your Plan
           </h2>
           <p className="mt-4 text-base leading-7 text-black sm:mt-8">
-            Find the plan that's right for you and start creating flashcards today.
+            Find the plan that&apos;s right for you and start creating flashcards today.
           </p>
         </div>
         <div className="grid grid-cols-1 mt-10 text-center sm:mt-16 sm:grid-cols-2 sm:gap-x-12 gap-y-12 md:grid-cols-3 md:gap-0 xl:mt-24">
