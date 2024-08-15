@@ -161,9 +161,9 @@ export default function Home() {
 export default function Home() {
 
   return (
-    <>
+    <div className='w-full'>
       <Header />
-      <section className='flex flex-col md:flex-row pt-20 items-center justify-center bg-lightgreen'>
+      <section className='w-full flex flex-col md:flex-row pt-20 items-center justify-center bg-lightgreen'>
         <article className='px-28'>
           <h1 className='text-6xl mb-5'>Create Flashcard from your text</h1>
           <p className='mb-10 text-2xl'>
@@ -241,6 +241,6 @@ export default function Home() {
         </div>
       </div>
     </section>
-    </>
+    </div>
   );
 }
