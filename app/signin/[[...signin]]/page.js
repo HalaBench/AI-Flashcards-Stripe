@@ -4,12 +4,13 @@ import { Box, Button } from "@mui/material";
 import { AppBar, Container, Toolbar, Typography} from "@mui/material";
 import { SignedIn, SignedOut, SignIn, UserButton } from "@clerk/clerk-react";
 import Link from "next/link";
+import Header from '@/app/Components/Header';
 
 export default function signInPage() {
 
     return(
-        <Container maxWidth="100vw">
-            <AppBar position="static" sx={{backgroundColor: "#3f51b5"}}>
+        <div className="w-full">
+            {/* <AppBar position="static" sx={{backgroundColor: "#3f51b5"}}>
                 <Toolbar>
                     <Typography variant="h6" style={{ flexGrow: 1 }}>
                         Flashcard SaaS
@@ -26,13 +27,15 @@ export default function signInPage() {
                         <UserButton />
                     </SignedIn>
                 </Toolbar>
-            </AppBar>
+            </AppBar> */}
+            <Header className='w-full'/>
 
-            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-                <Typography>Sign In</Typography>
+            <Box className='w-full flex flex-col pt-20 items-center justify-center bg-lightgreen mx-2 pb-20'>
+                <Typography className="text-5xl mb-10">Sign In to Get Back to Your Flashcards</Typography>
                 <SignIn />
             </Box>
-        </Container>
+        </div>
+        
     )
 
 }

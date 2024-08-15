@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
+import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
+
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -9,7 +11,7 @@ const Header = () => {
     };
 
     return (
-        <header className='flex flex-col md:flex-row justify-between items-center py-5 px-5 md:px-10 bg-lightgreen'>
+        <header className='w-full flex flex-col md:flex-row justify-between items-center py-5 px-5 md:px-10 bg-lightgreen'>
             <div className='flex justify-between items-center w-full'>
                 <h1 className='font-bold text-xl'>
                     Lumi<span className='text-logocolor'>Flash</span>
@@ -38,8 +40,14 @@ const Header = () => {
                 </nav>
 
                 <div className='flex flex-col md:flex-row items-center gap-4 md:gap-10  text-center'>
-                    <Link className='border-2 border-solid border-darkgreen px-4 py-1 rounded w-full md:w-auto' href="/signin">Login</Link>
-                    <Link className='border-2 border-solid border-darkgreen px-4 py-1 rounded bg-darkgreen text-white w-full md:w-auto' href="/signup">Register</Link>
+                    <SignedOut>
+                        <Link className='border-2 border-solid border-darkgreen px-4 py-1 rounded w-full md:w-auto' href="/signin">Login</Link>
+                        <Link className='border-2 border-solid border-darkgreen px-4 py-1 rounded bg-darkgreen text-white w-full md:w-auto' href="/signup">Register</Link>
+                    </SignedOut>
+                    <SignedIn>
+                        <Link href="/profile" className='w-full md:w-auto'>Profile</Link>
+                        <UserButton />
+                    </SignedIn>
                 </div>
             </div>
         </header>

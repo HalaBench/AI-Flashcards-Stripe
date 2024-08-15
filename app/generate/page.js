@@ -1,6 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { Box, Button } from "@mui/material";
+import Header from '@/app/Components/Header';
+
 
 export default function Generate() {
   const [topic, setTopic] = useState('');
@@ -8,6 +11,9 @@ export default function Generate() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const handleScroll = () => {
+      //scroll down
+  }
   const handleGenerate = async () => {
     setLoading(true);
     setError('');
@@ -58,8 +64,11 @@ export default function Generate() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
-      <h1 className="text-3xl font-bold mb-6">Generate Flashcards</h1>
+    <div>
+      <Header />
+    <div className="bg-gray-100 flex flex-col items-center justify-center" style={{ height: '500px'}}>
+      <h1 className="text-3xl font-bold mb-6">Generate Flashcards Below!</h1>
+      <button className='border-2 border-solid border-darkgreen px-4 py-1 rounded bg-darkgreen text-white w-full md:w-auto mb-5'>How it Works </button>
 
       <div className="w-full max-w-md">
         <input
@@ -100,6 +109,11 @@ export default function Generate() {
         )}
         {flashcards.length === 0 && !loading && <p>No flashcards generated yet.</p>}
       </div>
+    </div>
+    <section>
+      {/* should be a list of blocks of instructions on video, text, and document generation. */}
+      <div></div>
+    </section>
     </div>
   );
 }
