@@ -31,7 +31,7 @@ export default function signInPage() {
             <Header />
 
             <Box className='w-full flex pt-20 items-center justify-center gap-10 pb-20'>
-                <Typography className="w-1/3 text-5xl mb-10">Sign In And Start Generating Your Flashcards!</Typography>
+                <p className="w-1/3 text-5xl mb-10">Sign In And Start Generating Your Flashcards!</p>
                 <SignIn />
             </Box>
             <Footer />
