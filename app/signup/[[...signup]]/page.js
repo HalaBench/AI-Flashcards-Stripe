@@ -1,9 +1,7 @@
 "use client";
 
-import { Box, Button } from "@mui/material";
-import { AppBar, Container, Toolbar, Typography } from "@mui/material";
-import { SignedIn, SignedOut, SignUp, UserButton } from "@clerk/clerk-react";
-import Link from "next/link";
+import { Box } from "@mui/material";
+import { SignUp } from "@clerk/clerk-react";
 import Header from "@/app/Components/Header";
 import Footer from "@/app/Components/Footer";
 
