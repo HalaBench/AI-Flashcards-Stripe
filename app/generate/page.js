@@ -1,97 +1,145 @@
 'use client';
 
 import { useState } from 'react';
-import { Box, Button } from "@mui/material";
+import { Box, Button, TextField, IconButton, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Header from '@/app/Components/Header';
-
+import TextFieldsIcon from '@mui/icons-material/TextFields'; 
+import UploadFileIcon from '@mui/icons-material/UploadFile'; 
+import YouTubeIcon from '@mui/icons-material/YouTube';
 
 export default function Generate() {
   const [topic, setTopic] = useState('');
   const [flashcards, setFlashcards] = useState([]); 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [selectedOption, setSelectedOption] = useState(null);
 
-  const handleScroll = () => {
-      //scroll down
-  }
   const handleGenerate = async () => {
     setLoading(true);
     setError('');
 
-    try {
-      const response = await fetch('/api/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ topic }),
-      });
+    // The rest of your generate logic...
+  };
 
-      const data = await response.json();
-      console.log('API Response:', data); 
-
-      if (response.ok) {
-        const message = data.choices[0]?.message?.content;
-        console.log('Message Content:', message);
-
-        
-        const jsonStartIndex = message.indexOf('{');
-        const jsonEndIndex = message.lastIndexOf('}') + 1;
-
-        if (jsonStartIndex !== -1 && jsonEndIndex !== -1) {
-          const jsonString = message.slice(jsonStartIndex, jsonEndIndex);
-          console.log('Extracted JSON:', jsonString);
-
-          try {
-            const parsedMessage = JSON.parse(jsonString);
-            console.log('Parsed Flashcards:', parsedMessage.flashcards);
-            setFlashcards(parsedMessage.flashcards || []);
-          } catch (error) {
-            console.error('Failed to parse the flashcards:', error);
-            setError('Failed to parse the flashcards');
-          }
-        } else {
-          setError('Failed to extract JSON from the response');
-        }
-      } else {
-        setError(data.error || 'Failed to generate flashcards');
-      }
-    } catch (err) {
-      setError('Failed to fetch data from the server');
-    } finally {
-      setLoading(false);
-    }
+  const goBack = () => {
+    setSelectedOption(null);
   };
 
   return (
     <div>
       <Header />
-    <div className="bg-gray-100 flex flex-col items-center justify-center" style={{ height: '500px'}}>
-      <h1 className="text-3xl font-bold mb-6">Generate Flashcards Below!</h1>
-      <button className='border-2 border-solid border-darkgreen px-4 py-1 rounded bg-darkgreen text-white w-full md:w-auto mb-5'>How it Works </button>
+      <div className="bg-lightgreen flex flex-col items-center justify-center" style={{ height: '500px' }}>
+        
+        <h1 className="text-3xl font-bold mb-6">Generate Flashcards Below!</h1>
+        <section className="bg-white flex flex-col items-center pb-8 pt-4" style={{width:"550px", borderRadius:"10px"}}>
+          <div className="w-full items-left pl-8 pb-1">
+        {selectedOption && (
+          <IconButton
+            onClick={goBack}
+            style={{ justifyContent:'left', borderRadius:0 }}
+          >
+            
+            <ArrowBackIcon />
+            <Typography className='pl-1'>Go Back</Typography>
+          </IconButton>
+        )}
+        </div>
+        {!selectedOption && (
+          <>
+            
+            <div className="flex flex-col gap-4 w-full max-w-md">
+              <Button
+                className='border-2 border-solid border-darkgreen bg-darkgreen text-white w-full md:w-auto mb-2'
+                onClick={() => setSelectedOption('text')}
+              >
+                Text Generation
+              </Button>
+              <Button
+                className='border-2 border-solid border-darkgreen bg-darkgreen text-white w-full md:w-auto mb-2'
+                onClick={() => setSelectedOption('pdf')}
+              >
+                PDF Upload
+              </Button>
+              <Button
+                className='border-2 border-solid border-darkgreen bg-darkgreen text-white w-full md:w-auto mb-2'
+                onClick={() => setSelectedOption('youtube')}
+              >
+                YouTube Video
+              </Button>
+            </div>
+          </>
+        )}
 
-      <div className="w-full max-w-md">
-        <input
-          type="text"
-          value={topic}
-          onChange={(e) => setTopic(e.target.value)}
-          placeholder="Enter a topic"
-          className="w-full p-3 border border-gray-300 rounded mb-4"
-        />
+        {selectedOption === 'text' && (
+          <div className="w-full max-w-md mt-4">
+            <TextField
+              fullWidth
+              value={topic}
+              onChange={(e) => setTopic(e.target.value)}
+              placeholder="Enter a topic"
+              variant="outlined"
+              className="mb-4"
+            />
+            <Button
+              onClick={handleGenerate}
+              className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600"
+              disabled={!topic} // Disable button until input is provided
+              style={!topic ? { opacity: 0.5 } : {}}
+            >
+              {loading ? 'Generating...' : 'Generate Flashcards'}
+            </Button>
+          </div>
+        )}
 
-        <button
-          onClick={handleGenerate}
-          className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600"
-          disabled={loading}
-        >
-          {loading ? 'Generating...' : 'Generate Flashcards'}
-        </button>
+        {selectedOption === 'pdf' && (
+          <div className="w-full max-w-md mt-4">
+            <Button
+              variant="contained"
+              component="label"
+              className="w-full mb-4"
+            >
+              Upload PDF
+              <input
+                type="file"
+                hidden
+                accept=".pdf"
+                // Handle PDF upload logic here
+              />
+            </Button>
+            <Button
+              className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600"
+              // Add onClick for PDF generation logic
+            >
+              Submit
+            </Button>
+          </div>
+        )}
 
-        {error && <p className="text-red-500 mt-4">{error}</p>}
-      </div>
+        {selectedOption === 'youtube' && (
+          <div className="w-full max-w-md mt-4">
+            <TextField
+              fullWidth
+              placeholder="Enter YouTube URL"
+              variant="outlined"
+              className="mb-4"
+              // Handle YouTube URL logic here
+            />
+            <Button
+              onClick={handleGenerate}
+              className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600"
+              disabled={!topic} // You can disable based on URL logic as well
+              style={!topic ? { opacity: 0.5 } : {}}
+            >
+        {loading ? 'Generating...' : 'Generate Flashcards'}
+            </Button>
+          </div>
+        )}
 
-      <div className="mt-8 w-full max-w-lg">
+        {/* {error && <p className="text-red-500 mt-4">{error}</p>} */}
         {flashcards.length > 0 && (
+      <div className="mt-8 w-full max-w-lg">
+        
           <div>
             <h2 className="text-2xl font-bold mb-4">Generated Flashcards</h2>
             <ul className="space-y-4">
@@ -106,14 +154,54 @@ export default function Generate() {
               ))}
             </ul>
           </div>
+        
+        </div>
         )}
-        {flashcards.length === 0 && !loading && <p>No flashcards generated yet.</p>}
+        </section>
       </div>
-    </div>
-    <section>
-      {/* should be a list of blocks of instructions on video, text, and document generation. */}
-      <div></div>
-    </section>
+      <section className="p-8 items-center">
+        <h2 className="text-2xl font-bold mb-6 text-center pb-4">Instructions for Each Generation Option</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <Card className="w-full bg-lightgreen radius-5 p-4">
+            <TextFieldsIcon
+            />
+            <CardContent>
+              <Typography variant="h5" component="div">
+                Text Generation
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Enter a topic to generate flashcards based on text prompts.
+              </Typography>
+            </CardContent>
+          </Card>
+
+          <Card className="w-full bg-lightgreen radius-5 p-4">
+            <UploadFileIcon
+            />
+            <CardContent>
+              <Typography variant="h5" component="div">
+                PDF Upload
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Upload a PDF document to extract flashcards from the content.
+              </Typography>
+            </CardContent>
+          </Card>
+
+          <Card className="w-full bg-lightgreen radius-5 p-4 ">
+            <YouTubeIcon className="items-right"
+            />
+            <CardContent>
+              <Typography variant="h5" component="div">
+                YouTube Video
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Enter a YouTube video URL to generate flashcards from the video content.
+              </Typography>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
     </div>
   );
 }
