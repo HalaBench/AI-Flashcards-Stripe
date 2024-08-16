@@ -8,6 +8,7 @@ import TextFieldsIcon from '@mui/icons-material/TextFields';
 import UploadFileIcon from '@mui/icons-material/UploadFile'; 
 import YouTubeIcon from '@mui/icons-material/YouTube';
 
+
 export default function Generate() {
   const [topic, setTopic] = useState('');
   const [flashcards, setFlashcards] = useState([]); 
@@ -16,11 +17,39 @@ export default function Generate() {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const handleGenerate = async () => {
+    console.log("handling generate")
     setLoading(true);
     setError('');
+    try {
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ topic }),
+      });
 
-    // The rest of your generate logic...
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      console.log(result)
+      // const hi = JSON.parse(result.choices[0].message.content)
+      // console.log(hi)
+      setFlashcards(result || []);
+      print("flashcards here ", flashcards)
+      // setText(result.text); // Adjust based on the actual structure of the response
+    } catch (error) {
+      console.error('Error:', error);
+      setError('Failed to generate content');
+    } finally {
+      setLoading(false);
+    }
   };
+
+ 
+  
 
   const goBack = () => {
     setSelectedOption(null);
@@ -29,9 +58,9 @@ export default function Generate() {
   return (
     <div>
       <Header />
-      <div className="bg-lightgreen flex flex-col items-center justify-center" style={{ height: '500px' }}>
+      <div className="bg-lightgreen flex flex-col items-center justify-center pb-12" style={{ height: "auto" }}>
         
-        <h1 className="text-3xl font-bold mb-6">Generate Flashcards Below!</h1>
+        <h1 className="text-3xl font-bold mt-6 mb-6">Generate Flashcards Below!</h1>
         <section className="bg-white flex flex-col items-center pb-8 pt-4" style={{width:"550px", borderRadius:"10px"}}>
           <div className="w-full items-left pl-8 pb-1">
         {selectedOption && (
@@ -82,6 +111,7 @@ export default function Generate() {
               className="mb-4"
             />
             <Button
+              type="button" 
               onClick={handleGenerate}
               className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600"
               disabled={!topic} // Disable button until input is provided
@@ -107,7 +137,7 @@ export default function Generate() {
                 // Handle PDF upload logic here
               />
             </Button>
-            <Button
+            <Button type="button" 
               className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600"
               // Add onClick for PDF generation logic
             >
@@ -126,6 +156,7 @@ export default function Generate() {
               // Handle YouTube URL logic here
             />
             <Button
+            type="button" 
               onClick={handleGenerate}
               className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600"
               disabled={!topic} // You can disable based on URL logic as well
@@ -135,14 +166,14 @@ export default function Generate() {
             </Button>
           </div>
         )}
-
+        </section>
         {/* {error && <p className="text-red-500 mt-4">{error}</p>} */}
         {flashcards.length > 0 && (
-      <div className="mt-8 w-full max-w-lg">
+      <div className="mt-8 w-full">
         
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Generated Flashcards</h2>
-            <ul className="space-y-4">
+          <div className="mt-8 w-full  bg-lightgreen p-4 rounded-lg">
+            <h2 className="text-2xl font-bold mb-4 text-center">Generated Flashcards</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               {flashcards.map((card, index) => (
                 <li
                   key={index}
@@ -152,12 +183,14 @@ export default function Generate() {
                   <p className="mt-2">A: {card.back}</p>
                 </li>
               ))}
-            </ul>
+            </div>
           </div>
         
         </div>
         )}
-        </section>
+        
+
+        
       </div>
       <section className="p-8 items-center">
         <h2 className="text-2xl font-bold mb-6 text-center pb-4">Instructions for Each Generation Option</h2>

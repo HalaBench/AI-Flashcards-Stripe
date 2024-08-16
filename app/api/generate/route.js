@@ -81,6 +81,7 @@ export async function POST(request) {
         "back": str
       }]
     }
+    RETURN ONLY THE JSON AND NO OTHER MESSAGES BEFORE AND AFTER THE JSON
   `;
 
   try {
@@ -100,8 +101,9 @@ export async function POST(request) {
     });
 
     const data = await response.json();
+    const flashcards = JSON.parse(data.choices[0].message.content);
 
-    return NextResponse.json(data);
+    return NextResponse.json(flashcards.flashcards);
   } catch (error) {
     return NextResponse.json({ error: "Failed to fetch data from OpenRouter.ai" }, { status: 500 });
   }
