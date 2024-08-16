@@ -15,7 +15,7 @@ export default function signUnPage() {
 
             <Box className='w-full flex pt-20 items-center justify-center gap-10 pb-20'>
                 <p className="w-1/3 text-5xl mb-10">Sign Un And Start Generating Your Flashcards!</p>
-                <SignUp />
+                <SignUp fallbackRedirectUrl="/generate" />
             </Box>
             <Footer />
         </div>
