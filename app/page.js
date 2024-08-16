@@ -6,6 +6,7 @@ import FeatureCard from '@/app/Components/FeatureCard';
 import { faKeyboard, faGlobe, faBrain } from '@fortawesome/free-solid-svg-icons';
 import PricingPlan from '@/app/Components/PricingPlan';
 import Image from 'next/image';
+import Footer from './Components/Footer';
 
 
 
@@ -241,6 +242,7 @@ export default function Home() {
         </div>
       </div>
     </section>
+    <Footer />
     </div>
   );
 }

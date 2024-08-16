@@ -7,6 +7,7 @@ import Header from '@/app/Components/Header';
 import TextFieldsIcon from '@mui/icons-material/TextFields'; 
 import UploadFileIcon from '@mui/icons-material/UploadFile'; 
 import YouTubeIcon from '@mui/icons-material/YouTube';
+import Footer from '@/app/Components/Footer';
 
 
 export default function Generate() {
@@ -58,7 +59,7 @@ export default function Generate() {
   return (
     <div>
       <Header />
-      <div className="bg-lightgreen flex flex-col items-center justify-center pb-12" style={{ height: "auto" }}>
+      <div className="my-20 flex flex-col items-center justify-center pb-12" style={{ height: "auto" }}>
         
         <h1 className="text-3xl font-bold mt-6 mb-6">Generate Flashcards Below!</h1>
         <section className="bg-white flex flex-col items-center pb-8 pt-4" style={{width:"550px", borderRadius:"10px"}}>
@@ -192,10 +193,10 @@ export default function Generate() {
 
         
       </div>
-      <section className="p-8 items-center">
+      <section className="p-8 items-center bg-lightgreen">
         <h2 className="text-2xl font-bold mb-6 text-center pb-4">Instructions for Each Generation Option</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          <Card className="w-full bg-lightgreen radius-5 p-4">
+          <Card className="w-full radius-5 p-4">
             <TextFieldsIcon
             />
             <CardContent>
@@ -208,7 +209,7 @@ export default function Generate() {
             </CardContent>
           </Card>
 
-          <Card className="w-full bg-lightgreen radius-5 p-4">
+          <Card className="w-full  radius-5 p-4">
             <UploadFileIcon
             />
             <CardContent>
@@ -221,7 +222,7 @@ export default function Generate() {
             </CardContent>
           </Card>
 
-          <Card className="w-full bg-lightgreen radius-5 p-4 ">
+          <Card className="w-full  radius-5 p-4 ">
             <YouTubeIcon className="items-right"
             />
             <CardContent>
@@ -235,6 +236,7 @@ export default function Generate() {
           </Card>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

@@ -13,9 +13,9 @@ const Header = () => {
     return (
         <header className='w-full flex flex-col md:flex-row justify-between items-center py-5 px-5 md:px-10 bg-lightgreen'>
             <div className='flex justify-between items-center w-full'>
-                <h1 className='font-bold text-xl'>
+                <Link href="/" className='font-bold text-xl'>
                     Lumi<span className='text-logocolor'>Flash</span>
-                </h1>
+                </Link>
                 <button
                     className='md:hidden text-darkgreen'
                     onClick={toggleMenu}
@@ -28,8 +28,8 @@ const Header = () => {
                     isMenuOpen ? 'block' : 'hidden'
                 } md:flex flex-col md:flex-row items-center gap-4 md:gap-20 w-full mt-4 md:mt-0`}
             >
-                <nav className='w-full'>
-                    <ul className='flex flex-col md:flex-row items-center gap-4 md:gap-4'>
+                <nav className='md:ml-96'>
+                    <ul className='flex flex-col md:flex-row items-center gap-4 md:gap-10'>
                         <li className='w-full text-center'>
                             <Link href="/about">About</Link>
                         </li>
