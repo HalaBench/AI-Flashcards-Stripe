@@ -56,6 +56,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(request) {
   const { topic } = await request.json();
+  console.log("received topic, ", topic)
 
   const systemPrompt = `
     You are a flashcard creator. Your task is to generate concise and effective flashcards based on the given topic or content. Follow the guidelines below to create the flashcards:
@@ -101,6 +102,7 @@ export async function POST(request) {
     });
 
     const data = await response.json();
+    console.log("Data received:", data);
     const flashcards = JSON.parse(data.choices[0].message.content);
 
     return NextResponse.json(flashcards.flashcards);

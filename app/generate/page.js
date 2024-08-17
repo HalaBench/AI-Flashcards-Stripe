@@ -36,12 +36,8 @@ export default function Generate() {
 
       const result = await response.json();
       console.log(result)
-      // const hi = JSON.parse(result.choices[0].message.content)
-      // console.log(hi)
       setFlashcards(result || []);
-      print("flashcards here ", flashcards)
-      // setText(result.text); // Adjust based on the actual structure of the response
-    } catch (error) {
+      } catch (error) {
       console.error('Error:', error);
       setError('Failed to generate content');
     } finally {
@@ -114,8 +110,8 @@ export default function Generate() {
             <Button
               type="button" 
               onClick={handleGenerate}
-              className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600"
-              disabled={!topic} // Disable button until input is provided
+              className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600 border-2 border-solid border-darkgreen bg-darkgreen text-white"
+              disabled={!topic}
               style={!topic ? { opacity: 0.5 } : {}}
             >
               {loading ? 'Generating...' : 'Generate Flashcards'}

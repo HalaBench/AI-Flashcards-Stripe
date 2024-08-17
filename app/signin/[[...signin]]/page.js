@@ -11,7 +11,7 @@ export default function signInPage() {
         <div>
             <Header />
 
-            <Box className='w-full flex pt-20 items-center justify-center gap-10 pb-20'>
+            <Box className='w-full flex pt-20 items-center justify-center gap-10 pb-32'>
                 <p className="w-1/3 text-5xl mb-10">Sign In And Start Generating Your Flashcards!</p>
                 <SignIn fallbackRedirectUrl="/generate" />
             </Box>

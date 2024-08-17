@@ -26,7 +26,7 @@ const Header = () => {
             <div
                 className={`${
                     isMenuOpen ? 'block' : 'hidden'
-                } md:flex flex-col md:flex-row items-center gap-4 md:gap-20 w-full mt-4 md:mt-0`}
+                } md:flex flex-col md:flex-row items-center gap-4 md:gap-10 w-full mt-4 md:mt-0`}
             >
                 <nav className='md:ml-96'>
                     <ul className='flex flex-col md:flex-row items-center gap-4 md:gap-10'>

@@ -17,7 +17,7 @@ const Footer = () => {
                     <Image src="/linkedin.svg" alt="LinkedIn" width={50} height={50} />
                 </li>
             </ul>
-            <p className='text-black text-xl'>© 2024 - All rights reserved</p>
+            <p className='text-black text-xl'>LumiFlash© 2024 - All rights reserved</p>
 
         </footer>
     );
