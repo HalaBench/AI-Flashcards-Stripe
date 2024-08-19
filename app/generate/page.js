@@ -10,6 +10,9 @@ import YouTubeIcon from '@mui/icons-material/YouTube';
 import Footer from '@/app/Components/Footer';
 import saveFlashcards from '@/utils/saveFlashcards';
 import CardComponent from '@/app/Components/CardComponent';
+import { useUser } from '@clerk/clerk-react';
+
+
 
 export default function Generate() {
   const [topic, setTopic] = useState('');
@@ -17,7 +20,7 @@ export default function Generate() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [selectedOption, setSelectedOption] = useState(null);
-
+  const { user } = useUser();
 
   const handleGenerate = async () => {
     console.log("handling generate");
@@ -48,16 +51,20 @@ export default function Generate() {
     }
   };
 
-  const handleSave = async () => {
-    await saveFlashcards(flashcards);
-    alert('Flashcards saved successfully!');
-  };
+  
 
   const handleDiscard = () => {
     setFlashcards([]);
     alert('Flashcards discarded.');
   };
 
+
+  
+
+  const handleSave = async () => {
+    await saveFlashcards(flashcards, user); // Pass the user object here
+    alert('Flashcards saved successfully!');
+  };
 
 
 
@@ -260,3 +267,4 @@ export default function Generate() {
     </div>
   );
 }
+
