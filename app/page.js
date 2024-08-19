@@ -106,22 +106,23 @@ export default function Home() {
           <div className="grid grid-cols-1 mt-10 text-center sm:mt-16 sm:grid-cols-2 sm:gap-x-12 gap-y-12 md:grid-cols-3 md:gap-0 xl:mt-24">
             <PricingPlan
               planName="Free"
-              price="$0/month"
+              price={0}  // Numeric value
               description="Create up to 10 flashcards per month."
               features={["Access to basic features"]}
             />
             <PricingPlan
               planName="Basic"
-              price="$5/month"
+              price={5}  // Numeric value
               description="Create up to 100 flashcards per month."
               features={["Access to all features"]}
             />
             <PricingPlan
               planName="Pro"
-              price="$10/month"
+              price={10}  // Numeric value
               description="Unlimited flashcards per month."
               features={["Access to all features"]}
             />
+
           </div>
         </div>
       </section>
