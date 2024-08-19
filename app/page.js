@@ -12,6 +12,7 @@ import Footer from './Components/Footer';
 
 
 
+
 {/*}
 import getStripe from "@/utils/get-stripe";
 import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";

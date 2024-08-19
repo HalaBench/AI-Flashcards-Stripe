@@ -9,3 +9,24 @@
 }
 
 
+.perspective {
+  perspective: 1000px;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.relative {
+  transform-style: preserve-3d;
+}
+
+.transition-transform {
+  transition: transform 0.6s;
+}
+
+
