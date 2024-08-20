@@ -7,9 +7,8 @@ import { faKeyboard, faGlobe, faBrain } from '@fortawesome/free-solid-svg-icons'
 import PricingPlan from '@/app/Components/PricingPlan';
 import Image from 'next/image';
 import Footer from './Components/Footer';
-
-
-
+import { ClerkProvider, RedirectToSignIn, SignedIn } from '@clerk/nextjs'
+import { SignedOut } from '@clerk/clerk-react';
 
 
 {/*}
@@ -170,7 +169,13 @@ export default function Home() {
           <p className='mb-10 text-2xl'>
             The easiest way to create flashcard from scratch!
           </p>
+          <SignedIn>
+            <Link className='border-2 border-solid border-darkgreen px-20 py-4 rounded bg-darkgreen text-white ml-5' href='/generate'>Generate Now!</Link>
+          </SignedIn>
+          <SignedOut>
           <Link className='border-2 border-solid border-darkgreen px-20 py-4 rounded bg-darkgreen text-white ml-5' href='/signup'>Get Started!</Link>
+
+            </SignedOut>
         </article>
         <article>
           <Image  width={500} height={500} className="w-full" src='/hero.svg' alt='a woman holding a pc and smiling' />
