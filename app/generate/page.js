@@ -7,26 +7,75 @@ import Header from '@/app/Components/Header';
 import TextFieldsIcon from '@mui/icons-material/TextFields'; 
 import UploadFileIcon from '@mui/icons-material/UploadFile'; 
 import YouTubeIcon from '@mui/icons-material/YouTube';
-
+// import Footer from '@/app/Components/Footer';
+// import { YoutubeLoader } from "@langchain/community/document_loaders/web/youtube";
 
 export default function Generate() {
   const [topic, setTopic] = useState('');
+  const [youtubeUrl, setYoutubeUrl] = useState('');
   const [flashcards, setFlashcards] = useState([]); 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [selectedOption, setSelectedOption] = useState(null);
 
+  // const handleYTGen = async () => {
+  //   console.log("handling yt gen")
+  //   setLoading(true);
+  //   setError('');
+  //   try {
+  //     // const loader = new YoutubeLoader({ url: youtubeUrl });
+  //     const loader = new YoutubeLoader(
+  //       "https://youtu.be/bZQun8Y4L2A",
+  //       "en",
+  //       true,
+  //     );
+  //     const docs = await loader.load();
+  //   //   const loader = await YoutubeLoader.createFromUrl("https://youtu.be/bZQun8Y4L2A", {
+  //   //     mode: 'no-cors',
+  //   //     language: "en",
+  //   //     addVideoInfo: true,
+  //   // });
+  //     // const transcript = await loader.load();
+  //     console.log(docs)
+  //   }
+  //   catch {
+
+  //   }
+
+  // };
+  // const handleYTGen = async () => {
+  //   setLoading(true);
+  //   setError('');
+  //   try {
+  //     const loader = await YoutubeLoader.createFromUrl("https://youtu.be/bZQun8Y4L2A", {
+  //       language: "en",
+  //       addVideoInfo: true,
+  //     });
+  //     const docs = await loader.load();
+  //     console.log(docs);
+  //   } catch (error) {
+  //     console.error('Error loading YouTube video:', error);
+  //     setError('Failed to load video');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  
+
   const handleGenerate = async () => {
-    console.log("handling generate")
+    const topic ="The fox jumps on the red block"
+
+    console.log("handling generate", selectedOption, topic)
     setLoading(true);
     setError('');
+    
     try {
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ topic }),
+        body: JSON.stringify({ selectedOption, topic }),
       });
 
       if (!response.ok) {
@@ -35,12 +84,8 @@ export default function Generate() {
 
       const result = await response.json();
       console.log(result)
-      // const hi = JSON.parse(result.choices[0].message.content)
-      // console.log(hi)
       setFlashcards(result || []);
-      print("flashcards here ", flashcards)
-      // setText(result.text); // Adjust based on the actual structure of the response
-    } catch (error) {
+      } catch (error) {
       console.error('Error:', error);
       setError('Failed to generate content');
     } finally {
@@ -58,7 +103,7 @@ export default function Generate() {
   return (
     <div>
       <Header />
-      <div className="bg-lightgreen flex flex-col items-center justify-center pb-12" style={{ height: "auto" }}>
+      <div className="my-20 flex flex-col items-center justify-center pb-12" style={{ height: "auto" }}>
         
         <h1 className="text-3xl font-bold mt-6 mb-6">Generate Flashcards Below!</h1>
         <section className="bg-white flex flex-col items-center pb-8 pt-4" style={{width:"550px", borderRadius:"10px"}}>
@@ -79,19 +124,19 @@ export default function Generate() {
             
             <div className="flex flex-col gap-4 w-full max-w-md">
               <Button
-                className='border-2 border-solid border-darkgreen bg-darkgreen text-white w-full md:w-auto mb-2'
+                className='border-2 border-solid border-darkgreen bg-darkgreen text-white w-full md:w-auto mb-2 hover:bg-green-700'
                 onClick={() => setSelectedOption('text')}
               >
                 Text Generation
               </Button>
               <Button
-                className='border-2 border-solid border-darkgreen bg-darkgreen text-white w-full md:w-auto mb-2'
+                className='border-2 border-solid border-darkgreen bg-darkgreen text-white w-full md:w-auto mb-2 hover:bg-green-700'
                 onClick={() => setSelectedOption('pdf')}
               >
                 PDF Upload
               </Button>
               <Button
-                className='border-2 border-solid border-darkgreen bg-darkgreen text-white w-full md:w-auto mb-2'
+                className='border-2 border-solid border-darkgreen bg-darkgreen text-white w-full md:w-auto mb-2 hover:bg-green-700'
                 onClick={() => setSelectedOption('youtube')}
               >
                 YouTube Video
@@ -113,8 +158,8 @@ export default function Generate() {
             <Button
               type="button" 
               onClick={handleGenerate}
-              className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600"
-              disabled={!topic} // Disable button until input is provided
+              className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600 border-2 border-solid border-darkgreen bg-darkgreen text-white hover:bg-green-700"
+              disabled={!topic}
               style={!topic ? { opacity: 0.5 } : {}}
             >
               {loading ? 'Generating...' : 'Generate Flashcards'}
@@ -128,6 +173,7 @@ export default function Generate() {
               variant="contained"
               component="label"
               className="w-full mb-4"
+              
             >
               Upload PDF
               <input
@@ -139,7 +185,7 @@ export default function Generate() {
             </Button>
             <Button type="button" 
               className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600"
-              // Add onClick for PDF generation logic
+              onClick={handleGenerate}
             >
               Submit
             </Button>
@@ -157,9 +203,8 @@ export default function Generate() {
             />
             <Button
             type="button" 
-              onClick={handleGenerate}
+              onClick={handleYTGen}
               className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600"
-              disabled={!topic} // You can disable based on URL logic as well
               style={!topic ? { opacity: 0.5 } : {}}
             >
         {loading ? 'Generating...' : 'Generate Flashcards'}
@@ -192,10 +237,10 @@ export default function Generate() {
 
         
       </div>
-      <section className="p-8 items-center">
+      <section className="p-8 items-center bg-lightgreen">
         <h2 className="text-2xl font-bold mb-6 text-center pb-4">Instructions for Each Generation Option</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          <Card className="w-full bg-lightgreen radius-5 p-4">
+          <Card className="w-full radius-5 p-4">
             <TextFieldsIcon
             />
             <CardContent>
@@ -208,7 +253,7 @@ export default function Generate() {
             </CardContent>
           </Card>
 
-          <Card className="w-full bg-lightgreen radius-5 p-4">
+          <Card className="w-full  radius-5 p-4">
             <UploadFileIcon
             />
             <CardContent>
@@ -221,7 +266,7 @@ export default function Generate() {
             </CardContent>
           </Card>
 
-          <Card className="w-full bg-lightgreen radius-5 p-4 ">
+          <Card className="w-full  radius-5 p-4 ">
             <YouTubeIcon className="items-right"
             />
             <CardContent>
@@ -235,6 +280,7 @@ export default function Generate() {
           </Card>
         </div>
       </section>
+      {/* <Footer /> */}
     </div>
   );
 }
