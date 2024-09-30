@@ -231,6 +231,7 @@ export async function POST(request) {
     });
 
     const data = await response.json();
+    console.log("Data received:", data);
     const flashcards = JSON.parse(data.choices[0].message.content);
 
     return NextResponse.json(flashcards.flashcards);

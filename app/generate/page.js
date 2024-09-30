@@ -1,14 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { Box, Button, TextField, IconButton, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { Button, TextField, IconButton, Card, CardContent, Typography } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Header from '@/app/Components/Header';
-import TextFieldsIcon from '@mui/icons-material/TextFields'; 
-import UploadFileIcon from '@mui/icons-material/UploadFile'; 
+import TextFieldsIcon from '@mui/icons-material/TextFields';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 import YouTubeIcon from '@mui/icons-material/YouTube';
-// import Footer from '@/app/Components/Footer';
-// import { YoutubeLoader } from "@langchain/community/document_loaders/web/youtube";
+import Footer from '@/app/Components/Footer';
+import saveFlashcards from '@/utils/saveFlashcards';
+import CardComponent from '@/app/Components/CardComponent';
+import { useUser } from '@clerk/clerk-react';
+
+
 
 export default function Generate() {
   const [topic, setTopic] = useState('');
@@ -61,6 +65,7 @@ export default function Generate() {
   //   }
   // };
   
+  const { user } = useUser();
 
   const handleGenerate = async () => {
     const topic ="The fox jumps on the red block"
@@ -93,8 +98,23 @@ export default function Generate() {
     }
   };
 
- 
   
+
+  const handleDiscard = () => {
+    setFlashcards([]);
+    alert('Flashcards discarded.');
+  };
+
+
+  
+
+  const handleSave = async () => {
+    await saveFlashcards(flashcards, user); // Pass the user object here
+    alert('Flashcards saved successfully!');
+  };
+
+
+
 
   const goBack = () => {
     setSelectedOption(null);
@@ -106,7 +126,7 @@ export default function Generate() {
       <div className="my-20 flex flex-col items-center justify-center pb-12" style={{ height: "auto" }}>
         
         <h1 className="text-3xl font-bold mt-6 mb-6">Generate Flashcards Below!</h1>
-        <section className="bg-white flex flex-col items-center pb-8 pt-4" style={{width:"550px", borderRadius:"10px"}}>
+        <section className="bg-white flex flex-col items-center pb-8 pt-4" style={{ width: "550px", borderRadius: "10px" }}>
           <div className="w-full items-left pl-8 pb-1">
         {selectedOption && (
           <IconButton
@@ -192,13 +212,13 @@ export default function Generate() {
           </div>
         )}
 
-        {selectedOption === 'youtube' && (
-          <div className="w-full max-w-md mt-4">
-            <TextField
-              fullWidth
-              placeholder="Enter YouTube URL"
-              variant="outlined"
-              className="mb-4"
+          {selectedOption === 'youtube' && (
+            <div className="w-full max-w-md mt-4">
+              <TextField
+                fullWidth
+                placeholder="Enter YouTube URL"
+                variant="outlined"
+                className="mb-4"
               // Handle YouTube URL logic here
             />
             <Button
@@ -214,28 +234,38 @@ export default function Generate() {
         </section>
         {/* {error && <p className="text-red-500 mt-4">{error}</p>} */}
         {flashcards.length > 0 && (
-      <div className="mt-8 w-full">
-        
-          <div className="mt-8 w-full  bg-lightgreen p-4 rounded-lg">
-            <h2 className="text-2xl font-bold mb-4 text-center">Generated Flashcards</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-              {flashcards.map((card, index) => (
-                <li
-                  key={index}
-                  className="bg-white p-4 border border-gray-200 rounded shadow-sm"
+          <div className="mt-8 w-full">
+            <div className="mt-8 w-full bg-lightgreen p-4 rounded-lg">
+              <h2 className="text-2xl font-bold mb-28 text-center">Generated Flashcards</h2>
+              <div className="grid grid-cols-1 justify-center items-center sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mx-auto gap-4">
+                {flashcards.map((card, index) => (
+                  <CardComponent
+                    key={index}
+                    front={card.front}
+                    back={card.back}
+                  />
+                ))}
+              </div>
+              <div className="flex justify-end items-center mt-20 gap-10 mb-8">
+                <button
+                  onClick={handleSave}
+                  className="px-6 py-2 bg-darkgreen text-white rounded hover:bg-green-500"
                 >
-                  <p className="font-semibold">Q: {card.front}</p>
-                  <p className="mt-2">A: {card.back}</p>
-                </li>
-              ))}
+                  Save Flashcards
+                </button>
+                <button
+                  onClick={handleDiscard}
+                  className="px-6 py-2 bg-logocolor text-white rounded hover:bg-orange-500"
+                >
+                  Discard Flashcards
+                </button>
+              </div>
             </div>
           </div>
-        
-        </div>
         )}
-        
 
-        
+
+
       </div>
       <section className="p-8 items-center bg-lightgreen">
         <h2 className="text-2xl font-bold mb-6 text-center pb-4">Instructions for Each Generation Option</h2>
@@ -280,7 +310,8 @@ export default function Generate() {
           </Card>
         </div>
       </section>
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 }
+

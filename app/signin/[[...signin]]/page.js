@@ -1,39 +1,21 @@
 "use client";
 
-import { Box, Button } from "@mui/material";
-import { AppBar, Container, Toolbar, Typography} from "@mui/material";
-import { SignedIn, SignedOut, SignIn, UserButton } from "@clerk/clerk-react";
-import Link from "next/link";
+import { Box } from "@mui/material";
+import { SignIn } from "@clerk/clerk-react";
 import Header from '@/app/Components/Header';
+import Footer from "@/app/Components/Footer";
 
 export default function signInPage() {
 
     return(
-        <div className="w-full">
-            {/* <AppBar position="static" sx={{backgroundColor: "#3f51b5"}}>
-                <Toolbar>
-                    <Typography variant="h6" style={{ flexGrow: 1 }}>
-                        Flashcard SaaS
-                    </Typography>
-                    <SignedOut>
-                        <Button color="inherit">
-                          <Link  href="/signin" passHref> Login </Link>
-                        </Button>
-                        <Button color="inherit">
-                            <Link  href="/signup" passHref> Sign Up </Link>
-                        </Button>
-                    </SignedOut>
-                    <SignedIn>
-                        <UserButton />
-                    </SignedIn>
-                </Toolbar>
-            </AppBar> */}
-            <Header className='w-full'/>
+        <div>
+            <Header />
 
-            <Box className='w-full flex flex-col pt-20 items-center justify-center bg-lightgreen mx-2 pb-20'>
-                <Typography className="text-5xl mb-10">Sign In to Get Back to Your Flashcards</Typography>
-                <SignIn />
+            <Box className='w-full flex pt-20 items-center justify-center gap-10 pb-32'>
+                <p className="w-1/3 text-5xl mb-10">Sign In And Start Generating Your Flashcards!</p>
+                <SignIn fallbackRedirectUrl="/generate" />
             </Box>
+            <Footer />
         </div>
         
     )
