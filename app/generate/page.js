@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Button, TextField, IconButton, Card, CardContent, Typography } from "@mui/material";
+import { Button, TextField, IconButton, Card, CardContent, Typography, CssBaseline } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Header from '@/app/Components/Header';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
@@ -11,6 +11,7 @@ import Footer from '@/app/Components/Footer';
 import saveFlashcards from '@/utils/saveFlashcards';
 import CardComponent from '@/app/Components/CardComponent';
 import { useUser } from '@clerk/clerk-react';
+import { blue } from '@mui/material/colors';
 
 
 
@@ -68,7 +69,6 @@ export default function Generate() {
   const { user } = useUser();
 
   const handleGenerate = async () => {
-    const topic ="The fox jumps on the red block"
 
     console.log("handling generate", selectedOption, topic)
     setLoading(true);
@@ -109,8 +109,10 @@ export default function Generate() {
   
 
   const handleSave = async () => {
-    await saveFlashcards(flashcards, user); // Pass the user object here
+    
+    console.log("saved")
     alert('Flashcards saved successfully!');
+    await saveFlashcards(flashcards, user); // Pass the user object here
   };
 
 
@@ -122,6 +124,7 @@ export default function Generate() {
 
   return (
     <div>
+      <CssBaseline />
       <Header />
       <div className="my-20 flex flex-col items-center justify-center pb-12" style={{ height: "auto" }}>
         
@@ -146,18 +149,45 @@ export default function Generate() {
               <Button
                 className='border-2 border-solid border-darkgreen bg-darkgreen text-white w-full md:w-auto mb-2 hover:bg-green-700'
                 onClick={() => setSelectedOption('text')}
+                sx={{
+                  backgroundColor: 'green',
+                  border: '2px solid green',
+                  color: 'white',
+                  '&:hover': {
+                    backgroundColor: 'darkgreen',
+                    border: '2px solid darkgreen',
+                  },
+                }}
               >
                 Text Generation
               </Button>
               <Button
                 className='border-2 border-solid border-darkgreen bg-darkgreen text-white w-full md:w-auto mb-2 hover:bg-green-700'
                 onClick={() => setSelectedOption('pdf')}
+                sx={{
+                  backgroundColor: 'green',
+                  border: '2px solid green',
+                  color: 'white',
+                  '&:hover': {
+                    backgroundColor: 'darkgreen',
+                    border: '2px solid darkgreen',
+                  },
+                }}
               >
                 PDF Upload
               </Button>
               <Button
                 className='border-2 border-solid border-darkgreen bg-darkgreen text-white w-full md:w-auto mb-2 hover:bg-green-700'
                 onClick={() => setSelectedOption('youtube')}
+                sx={{
+                  backgroundColor: 'green',
+                  border: '2px solid green',
+                  color: 'white',
+                  '&:hover': {
+                    backgroundColor: 'darkgreen',
+                    border: '2px solid darkgreen',
+                  },
+                }}
               >
                 YouTube Video
               </Button>
@@ -179,6 +209,16 @@ export default function Generate() {
               type="button" 
               onClick={handleGenerate}
               className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600 border-2 border-solid border-darkgreen bg-darkgreen text-white hover:bg-green-700"
+              sx={{
+                marginTop: '20px',
+                backgroundColor: 'green',
+                border: '2px solid green',
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: 'darkgreen',
+                  border: '2px solid darkgreen',
+                },
+              }}
               disabled={!topic}
               style={!topic ? { opacity: 0.5 } : {}}
             >
@@ -193,6 +233,15 @@ export default function Generate() {
               variant="contained"
               component="label"
               className="w-full mb-4"
+              sx={{
+                backgroundColor: 'green',
+                border: '2px solid green',
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: 'darkgreen',
+                  border: '2px solid darkgreen',
+                },
+              }}
               
             >
               Upload PDF
@@ -204,8 +253,16 @@ export default function Generate() {
               />
             </Button>
             <Button type="button" 
-              className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600"
+              className="w-full text-green py-3 rounded"
               onClick={handleGenerate}
+              sx={{
+                color: "green",
+               
+                '&:hover': {
+                  backgroundColor: '#lightgray',
+                
+                },
+              }}
             >
               Submit
             </Button>
@@ -226,8 +283,17 @@ export default function Generate() {
               onClick={handleYTGen}
               className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600"
               style={!topic ? { opacity: 0.5 } : {}}
+              sx={{
+                backgroundColor: 'green',
+                border: '2px solid green',
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: 'darkgreen',
+                  border: '2px solid darkgreen',
+                },
+              }}
             >
-        {loading ? 'Generating...' : 'Generate Flashcards'}
+        {loading ? 'Generating...' : 'Generae Flashcards'}
             </Button>
           </div>
         )}
@@ -236,8 +302,8 @@ export default function Generate() {
         {flashcards.length > 0 && (
           <div className="mt-8 w-full">
             <div className="mt-8 w-full bg-lightgreen p-4 rounded-lg">
-              <h2 className="text-2xl font-bold mb-28 text-center">Generated Flashcards</h2>
-              <div className="grid grid-cols-1 justify-center items-center sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mx-auto gap-4">
+              <h2 className="text-3xl font-bold mb-20 text-center pt-8">Generated Flashcards</h2>
+              <div className="text-black grid grid-cols-1 justify-center items-center sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mx-auto gap-4">
                 {flashcards.map((card, index) => (
                   <CardComponent
                     key={index}

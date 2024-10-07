@@ -53,6 +53,7 @@ import { Pinecone } from '@pinecone-database/pinecone';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { PineconeStore } from "@langchain/pinecone";
 import { Pinecone as PineconeClient } from "@pinecone-database/pinecone";
+import pdf from 'pdf-parse';
 
 
 // const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -190,7 +191,7 @@ export async function POST(request) {
       const systemPrompt = `
     You are a flashcard creator. Your task is to generate concise and effective flashcards based on the given topic or content. Follow the guidelines below to create the flashcards:
 
-    1. Create clear and concise questions for the front of the flashcard.
+    1. Create clear and concise questions for the front of the flashcard. LIMIT THE WORD COUNT TO 30 WORDS PER FRONT OR BACK.
     2. Provide accurate and informative answers for the back of the flashcard.
     3. Ensure that each flashcard focuses on a single concept or piece of information.
     4. Use simple and easy-to-understand language.
@@ -201,6 +202,7 @@ export async function POST(request) {
     9. If given a body of text, extract the most important and relevant information for the flashcards.
     10. Aim to create a balanced set of flashcards that cover all key aspects of the topic or content.
     11. Only generate 10 flashcards.
+    
 
     Remember, the goal is to facilitate effective learning and retention of information through these flashcards.
 
@@ -211,7 +213,7 @@ export async function POST(request) {
         "back": str
       }]
     }
-    RETURN ONLY THE JSON AND NO OTHER MESSAGES BEFORE AND AFTER THE JSON
+    RETURN ONLY THE JSON AND NO OTHER MESSAGES BEFORE AND AFTER THE JSON. 
   `;
 
   
@@ -238,6 +240,15 @@ export async function POST(request) {
   }
     else if (selectedOption=='pdf') {
       console.log("PDFING");
+      async function extractTextFromPdf(pdfBuffer) {
+        try {
+          const data = await pdf(pdfBuffer);
+          return data.text;
+        } catch (error) {
+          console.error("Error extracting text from PDF:", error);
+          throw error;
+        }
+      }
       const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
       const model = genAI.getGenerativeModel({ model: "text-embedding-004" });
       const result = await model.embedContent(topic);
@@ -246,18 +257,19 @@ export async function POST(request) {
 
       const pc = new Pinecone({ apiKey: "b72ccca1-153b-4c99-9e72-124a9c98f952" });
 
-      const index = pc.index("indexName");
+      const index = pc.index("pdfupload");
       const pinecone = new PineconeClient();
       // Will automatically read the PINECONE_API_KEY and PINECONE_ENVIRONMENT env vars
       const pineconeIndex = pinecone.Index(process.env.PINECONE_INDEX);
 
-      const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
-        pineconeIndex,
-        // Maximum number of batch requests to allow at once. Each batch is 1000 vectors.
-        maxConcurrency: 5,
-        // You can pass a namespace here too
-        // namespace: "foo",
-      });
+      //COMMENTED HERE
+      // const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
+      //   pineconeIndex,
+      //   // Maximum number of batch requests to allow at once. Each batch is 1000 vectors.
+      //   maxConcurrency: 5,
+      //   // You can pass a namespace here too
+      //   // namespace: "foo",
+      // });
 
       const index1 = pc.index('ai-flashcards');
       console.log("WEKFDLSJKLFSJKL")
