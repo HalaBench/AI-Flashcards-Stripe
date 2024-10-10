@@ -53,7 +53,6 @@ import { Pinecone } from '@pinecone-database/pinecone';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { PineconeStore } from "@langchain/pinecone";
 import { Pinecone as PineconeClient } from "@pinecone-database/pinecone";
-import pdf from 'pdf-parse';
 
 
 // const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
