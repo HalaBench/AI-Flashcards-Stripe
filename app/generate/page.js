@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button, TextField, IconButton, Card, CardContent, Typography, CssBaseline } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Header from '@/app/Components/Header';
@@ -22,7 +22,14 @@ export default function Generate() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [selectedOption, setSelectedOption] = useState(null);
+  const [pdfFile, setPdfFile] = useState(null);
+  const [extractedText, setExtractedText] = useState('');
 
+  useEffect(() => {
+    if (pdfFile) {
+      console.log("Updated PDF File: ", pdfFile);
+    }
+  }, [pdfFile]);
   // const handleYTGen = async () => {
   //   console.log("handling yt gen")
   //   setLoading(true);
@@ -68,13 +75,41 @@ export default function Generate() {
   
   const { user } = useUser();
 
-  const handleGenerate = async () => {
+  const handleFileChange = (e) =>{
+    setPdfFile(e.target.files[0])
+    console.log("PDF FILE HERE< ", pdfFile)
+  }
 
+  const handleGenerate = async () => {
+  
     console.log("handling generate", selectedOption, topic)
     setLoading(true);
     setError('');
-    
+    setExtractedText('');
+
     try {
+      if (selectedOption == "pdf" && pdfFile){
+        const formData = new FormData();
+        formData.append('pdf', pdfFile);
+        console.log("formdata ", formData)
+        try {
+        const res = await fetch('/api/pdfExtract', {
+          method: 'POST',
+          body: formData,
+        })
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        console.log("RESPONSE,  ", res)
+        const data = await res.json();
+        setTopic(data.text)
+        console.log("data ", data.text);
+        setExtractedText(data.text);
+      } catch (error) {
+        console.log("error uploading pdf ", error);
+      }
+      }
+      
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: {
@@ -228,6 +263,7 @@ export default function Generate() {
         )}
 
         {selectedOption === 'pdf' && (
+          
           <div className="w-full max-w-md mt-4">
             <Button
               variant="contained"
@@ -242,27 +278,34 @@ export default function Generate() {
                   border: '2px solid darkgreen',
                 },
               }}
-              
+          
             >
               Upload PDF
               <input
                 type="file"
                 hidden
                 accept=".pdf"
-                // Handle PDF upload logic here
+                onChange={handleFileChange}
               />
             </Button>
+
+            {pdfFile && (
+                <div className="text-center mb-4">
+                  {/* <p>PDF NAME</p> */}
+                  <p>{pdfFile.name}</p> 
+                </div>
+              )}
+
             <Button type="button" 
               className="w-full text-green py-3 rounded"
               onClick={handleGenerate}
               sx={{
                 color: "green",
-               
                 '&:hover': {
                   backgroundColor: '#lightgray',
-                
                 },
               }}
+              disabled={!pdfFile}
             >
               Submit
             </Button>
