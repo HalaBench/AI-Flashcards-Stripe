@@ -90,17 +90,25 @@ export default function Generate() {
 
     try {
       if (selectedOption == "pdf" && pdfFile){
-        try{
-          const res1 = await axios.get("/api/health") 
-          console.log(res1.data)
-        } catch (error){
-          console.log("error ", error)
-        }
+        console.log("pdf selected bro")
+        // try{
+        //   const res1 = await axios.get("/api/health") 
+        //   console.log(res1.data)
+        // } catch (error){
+        //   console.log("error ", error)
+        // }
         const formData = new FormData();
         formData.append('pdf', pdfFile);
         console.log("formdata ", formData)
-        try {
 
+        try{
+          const res1 = await axios.post("http://localhost:500/upload", formData, { headers: {'Content-Type': 'multipart/form-data',},})
+          console.log("Flask server response: ", res1.data);
+        } catch (error) {
+          console.log("erro herr ", error)
+        }
+
+        try {
         const res = await fetch('/api/pdfExtract', {
           method: 'POST',
           body: formData,
