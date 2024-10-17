@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "concurrently \"npm run next\" \"npm run flask\"",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "next": "next dev",
+    "flask": "python3 app.py" 
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.4.0",
@@ -46,6 +48,7 @@
     "tesseract.js": "^5.1.1"
   },
   "devDependencies": {
+    "concurrently": "^9.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "postcss": "^8",

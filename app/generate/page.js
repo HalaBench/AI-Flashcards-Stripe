@@ -12,6 +12,7 @@ import saveFlashcards from '@/utils/saveFlashcards';
 import CardComponent from '@/app/Components/CardComponent';
 import { useUser } from '@clerk/clerk-react';
 import { blue } from '@mui/material/colors';
+import axios from 'axios';
 
 
 
@@ -89,10 +90,17 @@ export default function Generate() {
 
     try {
       if (selectedOption == "pdf" && pdfFile){
+        try{
+          const res1 = await axios.get("/api/health") 
+          console.log(res1.data)
+        } catch (error){
+          console.log("error ", error)
+        }
         const formData = new FormData();
         formData.append('pdf', pdfFile);
         console.log("formdata ", formData)
         try {
+
         const res = await fetch('/api/pdfExtract', {
           method: 'POST',
           body: formData,

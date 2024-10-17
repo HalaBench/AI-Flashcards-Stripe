@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-import PyPDF2
+# import PyPDF2
 
 app = Flask(__name__)
 
@@ -20,6 +20,10 @@ def upload_pdf():
         return jsonify({"content": "\n".join(text)}), 200
     else:
         return jsonify({"error": "Invalid file format"}), 400
+    
+@app.route('/health', methods=['POST', 'GET'])
+def health():
+    return jsonify({"message": "Flask server is running"}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
