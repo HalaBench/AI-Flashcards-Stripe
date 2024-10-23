@@ -1,32 +1,38 @@
+import base64
 from flask import Flask, request, jsonify
-# import PyPDF2
-
+from flask_cors import CORS
+import PyPDF2
+from io import BytesIO
 app = Flask(__name__)
 
-@app.route('/upload', methods=['POST'])
-def uploadpdf():
-    return jsonify({"message": "pdf server is running"}), 200
+CORS(app, resources={r"/*": {"origins": "*"}})
 
-def upload_pdf():
-    if 'file' not in request.files:
-        return jsonify({"error": "No file part"}), 400
+@app.route('/upload', methods=['POST', 'GET'])
+def uploadpdf():
+    print("found it KSDLFJSDL")
+    return jsonify({"message": "pdf servr is running"}), 200
+
+@app.route('/uploads', methods=['POST', 'GET'])
+def uploadspdf():
+    data = request.get_json()
+    if 'pdf' not in data:
+        return jsonify({"error": "No PDF data"}), 400
+
+    pdf_data = base64.b64decode(data['pdf'])
     
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({"error": "No selected file"}), 400
+    pdf_reader = PyPDF2.PdfReader(BytesIO(pdf_data))
+    text = []
+    for page in pdf_reader.pages:
+        print("sdkfljs", page.extract_text())
+        text.append(page.extract_text())
     
-    if file and file.filename.endswith('.pdf'):
-        pdf_reader = PyPDF2.PdfReader(file.stream)
-        text = []
-        for page in pdf_reader.pages:
-            text.append(page.extract_text())
-        return jsonify({"content": "\n".join(text)}), 200
-    else:
-        return jsonify({"error": "Invalid file format"}), 400
+    return jsonify({"content": "\n".join(text)}), 200
+    
+
     
 @app.route('/api/health', methods=['POST', 'GET'])
 def health():
     return jsonify({"message": "Flask server is running"}), 200
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=500)
+    app.run(debug=True, host='0.0.0.0', port=5010)

@@ -91,22 +91,31 @@ export default function Generate() {
     try {
       if (selectedOption == "pdf" && pdfFile){
         console.log("pdf selected bro")
-        // try{
-        //   const res1 = await axios.get("/api/health") 
-        //   console.log(res1.data)
-        // } catch (error){
-        //   console.log("error ", error)
-        // }
-        const formData = new FormData();
-        formData.append('pdf', pdfFile);
-        console.log("formdata ", formData)
+      
+        // const formData = new FormData();
+        // formData.append('pdf', pdfFile);
+        // console.log("formdata ", formData)
 
-        try{
-          const res1 = await axios.post("http://localhost:500/upload", formData, { headers: {'Content-Type': 'multipart/form-data',},})
-          console.log("Flask server response: ", res1.data);
-        } catch (error) {
-          console.log("erro herr ", error)
-        }
+        // try{
+        //   const res1 = await axios.post("http://localhost:5010/uploads", formData, { headers: {'Content-Type': 'multipart/form-data','Access-Control-Allow-Origin': '*',},})
+        //   console.log("Flask server response: ", res1.data);
+        // } catch (error) {
+        //   console.log("erro herr ", error)
+        // }
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+          const base64data = reader.result.split(',')[1]; // Remove the metadata
+          const response = await axios.post('http://localhost:5010/uploads', {
+              pdf: base64data,
+          });
+          console.log(response.data.content,response.data.content.length);
+      };
+      
+      reader.readAsDataURL(pdfFile);
+
+
+
+
 
         try {
         const res = await fetch('/api/pdfExtract', {
