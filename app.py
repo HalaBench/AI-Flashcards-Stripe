@@ -23,7 +23,7 @@ def uploadspdf():
     pdf_reader = PyPDF2.PdfReader(BytesIO(pdf_data))
     text = []
     for page in pdf_reader.pages:
-        print("sdkfljs", page.extract_text())
+        # print("sdkfljs", page.extract_text())
         text.append(page.extract_text())
     
     return jsonify({"content": "\n".join(text)}), 200

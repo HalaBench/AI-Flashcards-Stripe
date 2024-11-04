@@ -105,52 +105,51 @@ export default function Generate() {
         const reader = new FileReader();
         reader.onloadend = async () => {
           const base64data = reader.result.split(',')[1]; // Remove the metadata
-          const response = await axios.post('http://localhost:5010/uploads', {
+          try {
+
+            const response = await axios.post('http://localhost:5010/uploads', {
               pdf: base64data,
           });
           const pdfData = response.data.content;
-          console.log(response.data.content,response.data.content.length);
+          // console.log("PDF Data received from server:", pdfData);
+          const res = await fetch('/api/pdfExtract', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json', // Set the content type to JSON
+            },
+            body: JSON.stringify({content: pdfData}) ,
+          })
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+          }
+          const data = await res.json();
+          console.log("data nstuff", data);
+          setTopic(data.text); 
+          
+          setExtractedText(data.text);
+          
+          } catch(error){
+            console.log("errorr ehre:", error)
+          }
       };
-      
       reader.readAsDataURL(pdfFile);
-
-
-
-
-
-        try {
-        const res = await fetch('/api/pdfExtract', {
-          method: 'POST',
-          body: pdfData,
-        })
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        console.log("RESPONSE,  ", res)
-        const data = await res.json();
-        setTopic(data.text)
-        console.log("data ", data.text);
-        setExtractedText(data.text);
-      } catch (error) {
-        console.log("error uploading pdf ", error);
-      }
       }
       
-      const response = await fetch('/api/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ selectedOption, topic }),
-      });
+      // const response = await fetch('/api/generate', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({ selectedOption, topic }),
+      // });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
+      // if (!response.ok) {
+      //   throw new Error('Network response was not ok');
+      // }
 
-      const result = await response.json();
-      console.log(result)
-      setFlashcards(result || []);
+      // const result = await response.json();
+      // console.log("RESULSTS ARE HERE: ",result)
+      // setFlashcards(result || []);
       } catch (error) {
       console.error('Error:', error);
       setError('Failed to generate content');
