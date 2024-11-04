@@ -108,6 +108,7 @@ export default function Generate() {
           const response = await axios.post('http://localhost:5010/uploads', {
               pdf: base64data,
           });
+          const pdfData = response.data.content;
           console.log(response.data.content,response.data.content.length);
       };
       
@@ -120,7 +121,7 @@ export default function Generate() {
         try {
         const res = await fetch('/api/pdfExtract', {
           method: 'POST',
-          body: formData,
+          body: pdfData,
         })
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
