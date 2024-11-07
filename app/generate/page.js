@@ -111,7 +111,7 @@ export default function Generate() {
               pdf: base64data,
           });
           const pdfData = response.data.content;
-          // console.log("PDF Data received from server:", pdfData);
+          console.log("PDF Data received from server:", pdfData);
           const res = await fetch('/api/pdfExtract', {
             method: 'POST',
             headers: {

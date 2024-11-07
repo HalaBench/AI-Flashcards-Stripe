@@ -2,23 +2,48 @@ import { NextResponse } from "next/server";
 import { Pinecone } from "@pinecone-database/pinecone";
 import OpenAI from "openai"; // Ensure to import OpenAI correctly
 
-export const config = {
-  api: {
-    bodyParser: false, // Disabling bodyParser to handle multipart form data
-  },
-};
-
 export async function POST(request){
+
   console.log("MADE IT")
-  const {pdfData} = await request.json();
+
+  try{
+  const {content} = await request.json();
   const pc = new Pinecone({ apiKey: process.env.PINECONE_API_KEY})
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY})
-  const embedText = pdfData
+  const embedText = content
+  console.log("embed ", embedText)
   const response = await openai.embeddings.create({
-    model: "text-embedding-3-small",
-    input: embedText,
+    model: "text-embedding-ada-002",
+    input: [embedText],
     encoding_format: 'float',
   })
-  const returnedEmbedding = response.data[0].embedding
-  await pc.index('flashcards').namespase("ns1").upsert(returnedEmbedding);
+  console.log("RESONISE HERE ", response)
+  const embedding = response.data[0].embedding
+
+  const chunkId = `chunk_${Math.floor(Math.random() * 1e12)}`;
+
+  const metadata = {
+    source: "uploaded_pdf",
+    snippet: embedText.slice(0, 100), 
+    timestamp: new Date().toISOString(), 
+  };
+
+  const upsertData = [
+    {
+      id: chunkId,
+      values: embedding,
+      metadata: metadata,
+    },
+  ];
+  const index = pc.index('flashcards');
+  await index.namespace("ns1").upsert({ vectors: upsertData });
+
+  return NextResponse.json({
+    message: "Data successfully upserted",
+    upsertedId: chunkId,
+  });
+} catch (error) {
+  console.error("Error upserting data:", error);
+  return NextResponse.json({ error: "Failed to upsert data" }, { status: 500 });
+}
 }
